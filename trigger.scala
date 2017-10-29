@@ -1,3 +1,5 @@
+import sys.process._
+
 val doc = scala.io.Source.fromURL("https://github.com/yarwest/Git-production-trigger/commits/master", "UTF-8")
 val commitString: String = ".*class=\"message\".*"
 
@@ -9,8 +11,10 @@ val currentHash = scala.io.Source.fromFile(".git/refs/heads/master").getLines.ne
 
 if(!currentHash.equals(latestHash)) {
     println("It seems the remote repository is ahead of the local repository. Pulling to retrieve the changes.")
-} else {
-    println("The local branch is up to date.")
+    val command = "git pull".!
+    if(command != 0) {
+        println("There was a problem while updating the repository.")
+    }
 }
 
 def retrieveCommitHash(str : String) : String = {
