@@ -1,6 +1,8 @@
 import sys.process._
 
-val doc = scala.io.Source.fromURL("https://github.com/yarwest/Git-production-trigger/commits/master", "UTF-8")
+val repo = scala.io.Source.fromFile(".git/config").getLines.filter(line => line.matches("^\turl =.*")).mkString.stripPrefix("\turl = git@github.com:")
+
+val doc = scala.io.Source.fromURL("https://github.com/" + repo + "/commits/master", "UTF-8")
 val commitString: String = ".*class=\"message\".*"
 
 val latestHash = retrieveCommitHash(doc.getLines.filter(line => line.matches(commitString)).next)
